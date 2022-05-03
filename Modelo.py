@@ -1,5 +1,6 @@
 from OpenGL.GL import *
 from glew_wish import *
+from Modelo import *
 import glfw
 
 class Modelo:
@@ -95,7 +96,7 @@ class Modelo:
         glPushMatrix()
         glTranslatef(self.posicion_x, self.posicion_y, self.posicion_z)
         glBegin(GL_LINE_LOOP)
-        glColor3f(0.0, 0.0, 0.0)
+        glColor3f(1.0, 1.0, 1.0)
         glVertex3f(-self.extremo_izquierdo, -self.extremo_inferior, 0.0)
         glVertex3f(-self.extremo_izquierdo,self.extremo_superior,0.0)
         glVertex3f(self.extremo_derecho, self.extremo_superior,0.0)

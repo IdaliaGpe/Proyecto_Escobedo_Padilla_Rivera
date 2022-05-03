@@ -13,6 +13,7 @@ class StreamThread(Thread):
         self.tipo_dato = np.int16
         self.latencia = "high"
         self.app = app
+        
     def callback_stream(self, indata, outdata, frames, time, status):
 
         data = indata[:,0]
@@ -22,11 +23,15 @@ class StreamThread(Thread):
         frecuencia_fundamental = frecuencias[np.argmax(np.abs(transformada))]
         print("frecuencia fundamental: " + str(frecuencias[np.argmax(np.abs(transformada))]))
 
-        if frecuencia_fundamental > 400 and frecuencia_fundamental < 605:
-            self.app.nave.herido = True
-        else: 
-            self.app.nave.herido = False
+        # if frecuencia_fundamental > 300 and frecuencia_fundamental < 605:
+        #     self.JUMP = True
+        #     self.posicion_y_triangulo_anterior = self.posicion_y
+        
 
+        # if frecuencia_fundamental > 400 and frecuencia_fundamental < 605:
+        #     self.app.nave.herido = True
+        # else: 
+        #     self.app.nave.herido = False
         return
 
     def run(self):
