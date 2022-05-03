@@ -1,5 +1,4 @@
 from threading import Thread, Event
-
 import numpy as np
 import sounddevice as sd
 
@@ -23,7 +22,7 @@ class StreamThread(Thread):
         frecuencia_fundamental = frecuencias[np.argmax(np.abs(transformada))]
         print("frecuencia fundamental: " + str(frecuencias[np.argmax(np.abs(transformada))]))
 
-        if frecuencia_fundamental > 595 and frecuencia_fundamental < 605:
+        if frecuencia_fundamental > 400 and frecuencia_fundamental < 605:
             self.app.nave.herido = True
         else: 
             self.app.nave.herido = False
