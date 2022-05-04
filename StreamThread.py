@@ -1,6 +1,7 @@
 from threading import Thread, Event
 import numpy as np
 import sounddevice as sd
+from Character import *
 
 class StreamThread(Thread):
     def __init__(self, app):
@@ -13,6 +14,7 @@ class StreamThread(Thread):
         self.tipo_dato = np.int16
         self.latencia = "high"
         self.app = app
+        tiempo_anterior = 0.0 
         
     def callback_stream(self, indata, outdata, frames, time, status):
 
@@ -22,16 +24,46 @@ class StreamThread(Thread):
         frecuencias = np.fft.rfftfreq(len(data), periodo_muestreo)
         frecuencia_fundamental = frecuencias[np.argmax(np.abs(transformada))]
         print("frecuencia fundamental: " + str(frecuencias[np.argmax(np.abs(transformada))]))
-
-        # if frecuencia_fundamental > 300 and frecuencia_fundamental < 605:
-        #     self.JUMP = True
-        #     self.posicion_y_triangulo_anterior = self.posicion_y
         
+        
+        tiempo_actual = glfw.get_time()
+        tiempo_delta = tiempo_actual - self.app.player.tiempo_anterior
 
-        # if frecuencia_fundamental > 400 and frecuencia_fundamental < 605:
-        #     self.app.nave.herido = True
-        # else: 
-        #     self.app.nave.herido = False
+        poder_salto = 0.1
+        vel_y = self.app.player.velocidad_y * tiempo_delta * poder_salto
+        gravedad = -0.3
+        cantidad_de_salto = 0.01
+
+        vel_y = self.app.player.velocidad_y * tiempo_delta * self.app.player.poder_salto
+
+        if self.app.player.JUMP is False and self.app.player.IS_JUMPING is False and frecuencia_fundamental > 100 and frecuencia_fundamental < 150:
+            self.app.player.JUMP = True
+            self.app.player.posicion_y_triangulo_anterior = self.app.player.posicion_y
+            print('salto!')
+
+        if self.app.player.JUMP is True:
+            # Añade a la y la velocidad_y a la velocidad anteiror
+            # Añade la velocidad del salto
+            self.app.player.posicion_y += vel_y
+            self.app.player.IS_JUMPING = True
+
+        if self.app.player.IS_JUMPING:
+            if self.app.player.posicion_y - self.app.player.posicion_y_triangulo_anterior >= cantidad_de_salto:
+                self.app.player.JUMP = False
+                vel_y = gravedad * tiempo_delta
+                self.app.player.posicion_y += vel_y
+                self.app.player.IS_FALLING = True
+
+        if self.app.player.IS_FALLING: 
+            vel_y = gravedad * tiempo_delta
+            self.app.player.posicion_y += vel_y
+
+            if self.app.player.posicion_y <= self.app.player.posicion_y_triangulo_anterior:
+                self.app.player.IS_JUMPING = False
+                self.app.player.JUMP = False
+                self.app.player.IS_FALLING = False
+                self.app.player.posicion_y = self.app.player.posicion_y_triangulo_anterior   
+
         return
 
     def run(self):

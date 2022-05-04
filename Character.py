@@ -13,11 +13,12 @@ class Player(Modelo):
     IS_JUMPING = False
     IS_FALLING = False
     JUMP = False
-    # posicion_triangulo_x = -0.6
-    # posicion_triangulo_y = -0.65
-    # posicion_triangulo_z = 0
     posicion_y_triangulo_anterior = 0.0
     vivo = True
+    poder_salto = 1.5
+    gravedad = -0.3
+    cantidad_de_salto = 0.1
+            
 
     def __init__(self):
         super().__init__(-0.6,-0.65,0.0,1.0,0.0)
@@ -211,14 +212,13 @@ class Player(Modelo):
 
     def actualizar(self, window, tiempo_delta):
         if self.vivo: 
-            global tiempo_anterior
             global estado_tecla_arriba, estado_tecla_abajo
             # global posicion_triangulo_x, posicion_triangulo_y, posicion_triangulo_z, posicion_y_triangulo_anterior
 
             # tiempo_actual = glfw.get_time()
-            # #Cuanto tiempo paso entre la ejecucion actual
-            # #y la inmediata anterior de esta funcion
-            # tiempo_delta = tiempo_actual - tiempo_anterior
+            # # #Cuanto tiempo paso entre la ejecucion actual
+            # # #y la inmediata anterior de esta funcion
+            # tiempo_delta = tiempo_actual - self.tiempo_anterior
 
             #Leer los estados de las teclas que queremos
             estado_tecla_arriba = glfw.get_key(window, glfw.KEY_UP)
@@ -239,35 +239,35 @@ class Player(Modelo):
             if estado_tecla_izquierda == glfw.PRESS:
                 self.posicion_x = self.posicion_x - cantidad_movimiento
 
-            poder_salto = 1.5
-            vel_y = self.velocidad_y * tiempo_delta * poder_salto
-            gravedad = -0.3
-            cantidad_de_salto = 0.1
+            # poder_salto = 0.5
+            # vel_y = self.velocidad_y * tiempo_delta * poder_salto
+            # gravedad = -0.1
+            # cantidad_de_salto = 0.01
             estado_tecla_space = glfw.get_key(window, glfw.KEY_SPACE)
             
-            if self.JUMP is False and self.IS_JUMPING is False and estado_tecla_space == glfw.PRESS:
-                self.JUMP = True
-                self.posicion_y_triangulo_anterior = self.posicion_y
+            # if self.JUMP is False and self.IS_JUMPING is False and estado_tecla_space == glfw.PRESS:
+            #     self.JUMP = True
+            #     self.posicion_y_triangulo_anterior = self.posicion_y
 
-            if self.JUMP is True:
-                # Añade a la y la velocidad_y a la velocidad anteiror
-                # Añade la velocidad del salto
-                self.posicion_y += vel_y
-                self.IS_JUMPING = True
+            # if self.JUMP is True:
+            #     # Añade a la y la velocidad_y a la velocidad anteiror
+            #     # Añade la velocidad del salto
+            #     self.posicion_y += vel_y
+            #     self.IS_JUMPING = True
 
-            if self.IS_JUMPING:
-                if self.posicion_y - self.posicion_y_triangulo_anterior >= cantidad_de_salto:
-                    self.JUMP = False
-                    vel_y = gravedad * tiempo_delta
-                    self.posicion_y += vel_y
-                    self.IS_FALLING = True
+            # if self.IS_JUMPING:
+            #     if self.posicion_y - self.posicion_y_triangulo_anterior >= cantidad_de_salto:
+            #         self.JUMP = False
+            #         vel_y = gravedad * tiempo_delta
+            #         self.posicion_y += vel_y
+            #         self.IS_FALLING = True
 
-            if self.IS_FALLING: 
-                vel_y = gravedad * tiempo_delta
-                self.posicion_y += vel_y
+            # if self.IS_FALLING: 
+            #     vel_y = gravedad * tiempo_delta
+            #     self.posicion_y += vel_y
 
-                if self.posicion_y <= self.posicion_y_triangulo_anterior:
-                    self.IS_JUMPING = False
-                    self.JUMP = False
-                    self.IS_FALLING = False
-                    self.posicion_y = self.posicion_y_triangulo_anterior   
+            #     if self.posicion_y <= self.posicion_y_triangulo_anterior:
+            #         self.IS_JUMPING = False
+            #         self.JUMP = False
+            #         self.IS_FALLING = False
+            #         self.posicion_y = self.posicion_y_triangulo_anterior   

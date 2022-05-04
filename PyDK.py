@@ -62,7 +62,7 @@ class App:
                 # self.player.vivo = False
             # for escalera in self.escaleras:
             #     if self.player.colisionando(escalera) and estado_tecla_arriba == glfw.PRESS:
-            #         self.player.posicion_y = self.player.posicion_y + self.cantidad_movimiento
+            #         self.player.posicion_y = self.player.posicion_y  + self.cantidad_movimiento
             #     if self.player.colisionando(escalera) and estado_tecla_abajo == glfw.PRESS:
             #         self.player.posicion_y = self.player.posicion_y - self.cantidad_movimiento
 
@@ -146,7 +146,7 @@ class App:
         print(version)
 
         #iniciar StreamThread
-        self.stream_thread = StreamThread(self)
+        self.stream_thread = StreamThread(self)   
         self.stream_thread.daemon = True
         self.stream_thread.start()
 
