@@ -1,11 +1,11 @@
 from threading import Thread, Event
 import numpy as np
 import sounddevice as sd
-from Character import *
 
 class StreamThread(Thread):
+
     def __init__(self, app):
-        super().__init__()
+        super().__init__()        
         self.dispoitivo_input = 1
         self.dispoitivo_output = 3
         self.tamano_bloque = 8000
@@ -14,8 +14,7 @@ class StreamThread(Thread):
         self.tipo_dato = np.int16
         self.latencia = "high"
         self.app = app
-        tiempo_anterior = 0.0 
-        
+
     def callback_stream(self, indata, outdata, frames, time, status):
 
         data = indata[:,0]
@@ -24,45 +23,49 @@ class StreamThread(Thread):
         frecuencias = np.fft.rfftfreq(len(data), periodo_muestreo)
         frecuencia_fundamental = frecuencias[np.argmax(np.abs(transformada))]
         print("frecuencia fundamental: " + str(frecuencias[np.argmax(np.abs(transformada))]))
-        
-        
-        tiempo_actual = glfw.get_time()
-        tiempo_delta = tiempo_actual - self.app.player.tiempo_anterior
 
-        poder_salto = 0.1
-        vel_y = self.app.player.velocidad_y * tiempo_delta * poder_salto
-        gravedad = -0.3
-        cantidad_de_salto = 0.01
+        if frecuencia_fundamental <= 80:
+            print("Apretar cuerda para tecla 6 (E2)")
 
-        vel_y = self.app.player.velocidad_y * tiempo_delta * self.app.player.poder_salto
+        if frecuencia_fundamental >= 81 and frecuencia_fundamental <= 83:
+            print("Tecla 6 (E)")
+        if frecuencia_fundamental >= 84 and frecuencia_fundamental <= 100:
+            print("Aflojar cuerda para tecla 6 (E2)")
 
-        if self.app.player.JUMP is False and self.app.player.IS_JUMPING is False and frecuencia_fundamental > 100 and frecuencia_fundamental < 150:
-            self.app.player.JUMP = True
-            self.app.player.posicion_y_triangulo_anterior = self.app.player.posicion_y
-            print('salto!')
+        if frecuencia_fundamental >= 101 and frecuencia_fundamental <= 108:
+            print("Apretar cuerda para tecla 5 (A2)")
+        if frecuencia_fundamental >= 109 and frecuencia_fundamental <= 111:
+            print("Tecla 5 (A)")
+        if frecuencia_fundamental >= 112 and frecuencia_fundamental <= 120:
+            print("Aflojar cuerda para tecla 5 (A2)")
 
-        if self.app.player.JUMP is True:
-            # Añade a la y la velocidad_y a la velocidad anteiror
-            # Añade la velocidad del salto
-            self.app.player.posicion_y += vel_y
-            self.app.player.IS_JUMPING = True
+        if frecuencia_fundamental >= 121 and frecuencia_fundamental <= 144:
+            print("Apretar cuerda para tecla 4 (D3)")
+        if frecuencia_fundamental >= 145 and frecuencia_fundamental <= 148:
+            print("Tecla 4 (D)")
+        if frecuencia_fundamental >= 149 and frecuencia_fundamental <= 170:
+            print("Aflojar cuerda para tecla 4 (D3)")
 
-        if self.app.player.IS_JUMPING:
-            if self.app.player.posicion_y - self.app.player.posicion_y_triangulo_anterior >= cantidad_de_salto:
-                self.app.player.JUMP = False
-                vel_y = gravedad * tiempo_delta
-                self.app.player.posicion_y += vel_y
-                self.app.player.IS_FALLING = True
+        if frecuencia_fundamental >= 171 and frecuencia_fundamental <= 194:
+            print("Apretar cuerda para tecla 3 (G3)")
+        if frecuencia_fundamental >= 195 and frecuencia_fundamental <= 197:
+            print("Tecla 3 (G)")
+        if frecuencia_fundamental >= 198 and frecuencia_fundamental <= 212:
+            print("Aflojar cuerda para tecla 3 (G3)")
 
-        if self.app.player.IS_FALLING: 
-            vel_y = gravedad * tiempo_delta
-            self.app.player.posicion_y += vel_y
+        if frecuencia_fundamental >= 212 and frecuencia_fundamental <= 244:
+            print("Apretar cuerda para tecla 2 (B3)")
+        if frecuencia_fundamental >= 245 and frecuencia_fundamental <= 247:
+            print("Tecla 2 (B)")
+        if frecuencia_fundamental >= 248 and frecuencia_fundamental <= 300:
+            print("Aflojar cuerda para tecla 2 (B3)")
 
-            if self.app.player.posicion_y <= self.app.player.posicion_y_triangulo_anterior:
-                self.app.player.IS_JUMPING = False
-                self.app.player.JUMP = False
-                self.app.player.IS_FALLING = False
-                self.app.player.posicion_y = self.app.player.posicion_y_triangulo_anterior   
+        if frecuencia_fundamental >= 301 and frecuencia_fundamental <= 327:
+            print("Apretar cuerda para tecla 1 (E4)")
+        if frecuencia_fundamental >= 328 and frecuencia_fundamental <= 330:
+            print("Tecla 1 (E)")
+        if frecuencia_fundamental >= 331:
+            print("Aflojar cuerda para tecla 1 (E4)")
 
         return
 
@@ -82,3 +85,4 @@ class StreamThread(Thread):
 
         except Exception as e:
             print(str(e))
+
